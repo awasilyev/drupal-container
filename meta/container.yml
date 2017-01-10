@@ -1,0 +1,4 @@
+drupal:
+  image: centos:7
+  working_dir: /
+  user: drupal

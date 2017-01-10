@@ -1,0 +1,19 @@
+---
+- name: Install Packages
+  package: name={{item}} state=installed
+  with_items:
+  - git
+#  - MySQL-python
+
+- name: Create user
+  user:
+    name: drupal
+    uid: 1000
+    group: root
+    createhome: no
+
+#- include: db.yml
+- include: drupal.yml
+
+- name: Cleanup
+  shell: yum clean all -y
