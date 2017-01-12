@@ -1,0 +1,26 @@
+#!/bin/sh
+rm -f /var/run/httpd/httpd.pid
+
+echo >~/.my.cnf <<EOT
+[client]
+host=${MYSQL_HOST}
+user=${MYSQL_USERNAME}
+password=${MYSQL_MASSWORD}
+EOT
+
+cd {{ drupal_core_path }}
+#if [ ! -s sites/default/settings.php ]; then
+    yes | drush si {{ drupal_install_profile }} -y \
+    --site-name="{{ drupal_site_name }}" \
+    --account-name={{ drupal_admin_name }} \
+    --account-pass={{ drupal_admin_password}} \
+    --db-url=mysql://${MYSQL_USERNAME}:${MYSQL_PASSWORD}@${MYSQL_HOST}/${MYSQL_DATABASE}
+#fi
+
+{% if APACHE_SSL == 1 %}
+if [ ! -r /etc/httpd/ssl/cert.crt ]; then
+  cd  /etc/httpd/ssl
+  openssl req -subj '/CN={{APACHE_HOSTNAME}}/O=My Company Name LTD./C=US' -new -newkey rsa:2048 -days 3650 -sha256  -nodes -x509 -keyout cert.key -out cert.crt
+fi
+{% endif %}
+exec "$@"

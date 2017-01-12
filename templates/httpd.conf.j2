@@ -1,0 +1,61 @@
+ServerRoot "/etc/httpd"
+Listen {{ APACHE_PORT }}
+
+Include conf.modules.d/*.conf
+
+User drupal
+Group root
+
+ServerAdmin root@{{ APACHE_HOSTNAME }}
+
+DocumentRoot "/var/www/html"
+
+<Directory "/var/www/html">
+Options {{ APACHE_VHOST_OPTIONS }}
+AllowOverride {{ APACHE_ALLOW_OVERRIDE }}
+Require all granted
+</Directory>
+
+{% for p in APACHE_EXTRA_PARAMETERS %}
+{{p}}
+{% endfor  %}
+
+<IfModule dir_module>
+    DirectoryIndex index.html
+</IfModule>
+
+<Files ".ht*">
+    Require all denied
+</Files>
+
+ErrorLog "/dev/stderr"
+LogLevel warn
+
+
+<IfModule log_config_module>
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+    CustomLog "/dev/stdout" combined
+</IfModule>
+
+<IfModule mime_module>
+    TypesConfig /etc/mime.types
+    AddType text/html .shtml
+    AddOutputFilter INCLUDES .shtml
+</IfModule>
+
+AddDefaultCharset {{ APACHE_DEFAULT_CHARSET}}
+
+<IfModule mime_magic_module>
+    MIMEMagicFile conf/magic
+</IfModule>
+
+EnableSendfile on
+
+IncludeOptional conf.d/*.conf
+
+#<VirtualHost _default_:80>
+#    include conf.d/vhost.inc
+#</VirtualHost>
+
+

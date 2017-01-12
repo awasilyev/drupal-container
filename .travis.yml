@@ -32,7 +32,7 @@ script:
 
   # Install dependency roles
   - ansible-container install git+https://github.com/awasilyev/apache-container
-  - ansible-container install git+https://github.com/awasilyev/mariadb-container
+  - ansible-container install git+https://github.com/chouseknecht/mariadb-container
 
   # Build the service image
   - ansible-container build

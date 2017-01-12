@@ -1,0 +1,23 @@
+---
+- name: Install Webtatic
+  yum: name=https://mirror.webtatic.com/yum/el7/webtatic-release.rpm state=present 
+
+- yum: name=php-common state=absent
+
+- name: Install Packages
+  package: name={{item}} state=installed
+  with_items:
+  - php56w-common
+  - php56w-gd
+  - php56w-xml
+  - php56w-opcache
+  - php56w-mbstring
+  - php56w-mysql
+  - php56w
+  - httpd
+  - mod_ssl
+  - mysql
+  - git
+
+- name: Cleanup
+  shell: yum clean all -y
