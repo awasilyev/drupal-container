@@ -1,16 +1,13 @@
 #!/bin/sh
 rm -f /var/run/httpd/httpd.pid
-
-echo >~/.my.cnf <<EOT
-[client]
-host=${MYSQL_HOST}
-user=${MYSQL_USERNAME}
-password=${MYSQL_MASSWORD}
-EOT
+set -x
+echo mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} -h ${MYSQL_HOST} 1>&2
+while ! timeout 1 bash -c "echo > /dev/tcp/${MYSQL_HOST}/3306"; do sleep 2; done
+while ! timeout 1 echo 'select now()'|mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} -h ${MYSQL_HOST}; do sleep 2;done
 
 cd {{ drupal_core_path }}
 #if [ ! -s sites/default/settings.php ]; then
-    yes | drush si {{ drupal_install_profile }} -y \
+yes | drush si {{ drupal_install_profile }} -y \
     --site-name="{{ drupal_site_name }}" \
     --account-name={{ drupal_admin_name }} \
     --account-pass={{ drupal_admin_password}} \
