@@ -11,13 +11,13 @@
     - name: Wait for service to be available
       wait_for:
         host: "{{ host_addr }}"
-        port: 443
+        port: 8080
         delay: 1
         timeout: 15
 
     - name: Query the home page
       uri:
-        url: "https://{{ host_addr }}:443"
+        url: "http://{{ host_addr }}:8080"
         validate_certs: no
         return_content: yes
       register: output
@@ -26,6 +26,6 @@
       debug:
         var: output
 
-    - name: Should see server name 
+    - name: Should see 
       assert:
-        that: "'Apache HTTP Server' in output.content"
+        that: "'Drupal' in output.content"

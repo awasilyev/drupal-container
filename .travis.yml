@@ -8,7 +8,7 @@ services:
 before_install:
   - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty-backports universe'
   - sudo apt-get update -qq
-  - sudo apt-get install -y -o Dpkg::Options::="--force-confold" --force-yes docker-engine
+  - sudo apt-get install -y -o Dpkg::Options::="--force-confold" --force-yes docker-engine curl
 
 install:
   # Install the latest Ansible Container and Ansible
@@ -30,17 +30,13 @@ script:
   - echo "Installing and testing git+https://github.com/${TRAVIS_REPO_SLUG},${TRAVIS_COMMIT}"
   - ansible-container install git+https://github.com/${TRAVIS_REPO_SLUG},${TRAVIS_COMMIT}
 
-  # Install dependency roles
-  - ansible-container install git+https://github.com/awasilyev/apache-container
-  - ansible-container install git+https://github.com/chouseknecht/mariadb-container
-
+  - curl https://raw.githubusercontent.com/awasilyev/drupal-container/master/tests/container.yml >ansible/container.yml
+ 
   # Build the service image
   - ansible-container build
 
   # Start the service
   - ansible-container run -d 
-  - docker inspect ansible_apache_1 
-  - docker exec -it ansible_apache_1 ls -l /var/www/html/
   - docker logs ansible_apache_1
 
   # Run tests
