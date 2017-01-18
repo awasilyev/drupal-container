@@ -30,6 +30,9 @@ script:
   - echo "Installing and testing git+https://github.com/${TRAVIS_REPO_SLUG},${TRAVIS_COMMIT}"
   - ansible-container install git+https://github.com/${TRAVIS_REPO_SLUG},${TRAVIS_COMMIT}
 
+  # Install dependency
+  - ansible-container install git+https://github.com/chouseknecht/mariadb-container
+
   - curl https://raw.githubusercontent.com/awasilyev/drupal-container/master/tests/container.yml >ansible/container.yml
  
   # Build the service image
