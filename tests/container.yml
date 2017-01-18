@@ -1,0 +1,39 @@
+---
+version: '2'
+defaults:
+ MARIADB_DATABASE: drupal
+ MARIADB_USERNAME: drupal
+ MARIADB_PASSWORD: admin
+ MARIADB_ROOT_PASSWORD: admin
+services:
+  drupal:
+    image: centos:7
+    entrypoint: [/usr/bin/entrypoint.sh]
+    working_dir: /
+    user: drupal
+    environment:
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USERNAME=drupal
+      - MYSQL_PASSWORD=drupal
+      - MYSQL_HOST=mariadb
+    command: [/usr/bin/dumb-init, httpd, -DFOREGROUND]
+    links:
+    - mariadb
+    ports:
+    - 8080:8080
+    - 8843:8443
+    #volumes:
+    #  - ./html/:/var/www/html
+  mariadb:
+    image: centos:7
+    entrypoint: [/usr/bin/entrypoint.sh]
+    working_dir: /
+    user: mysql
+    command: [mysqld]
+    ports:
+    - 3306:3306
+    environment:
+      MARIADB_USERNAME: drupal
+      MARIADB_PASSWORD: drupal
+      MARIADB_DATABASE: drupal
+      MARIADB_ROOT_PASSWORD: admin
