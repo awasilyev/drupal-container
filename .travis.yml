@@ -40,12 +40,9 @@ script:
 
   # Start the service
   - ansible-container run -d 
-  - docker logs ansible_apache_1
 
   # Run tests
   - ansible-playbook test.yml
-  
-  - docker logs ansible_apache_1
 
 notifications:
   email: false

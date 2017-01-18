@@ -21,6 +21,10 @@
         validate_certs: no
         return_content: yes
       register: output
+      retries: 15
+      delay: 3
+      until: output|succeeded
+      
 
     - name: Show output
       debug:

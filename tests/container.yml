@@ -15,7 +15,7 @@ services:
       - MYSQL_DATABASE=drupal
       - MYSQL_USERNAME=drupal
       - MYSQL_PASSWORD=drupal
-      - MYSQL_PORT=13306
+      - MYSQL_PORT=3306
       - MYSQL_HOST=mariadb
     command: [/usr/bin/dumb-init, httpd, -DFOREGROUND]
     links:
@@ -31,8 +31,6 @@ services:
     working_dir: /
     user: mysql
     command: [mysqld]
-    ports:
-    - 13306:3306
     environment:
       MARIADB_USERNAME: drupal
       MARIADB_PASSWORD: drupal

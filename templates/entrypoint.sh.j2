@@ -1,17 +1,15 @@
 #!/bin/sh
 rm -f /var/run/httpd/httpd.pid
 set -x
-while ! timeout 1 bash -c "echo > /dev/tcp/${MYSQL_HOST}/${MYSQL_PORT}"; do sleep 2; done
+while ! timeout 1 bash -c "echo > /dev/tcp/${MYSQL_HOST}/${MYSQL_PORT}"; do sleep 2; date; ping -c 1 ${MYSQL_HOST}; done
 while ! timeout 1 echo 'select now()'|mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} -h ${MYSQL_HOST} -P ${MYSQL_PORT:-3306}; do sleep 2;done
 
 cd {{ drupal_core_path }}
-#if [ ! -s sites/default/settings.php ]; then
 yes | drush si {{ drupal_install_profile }} -y \
     --site-name="{{ drupal_site_name }}" \
     --account-name={{ drupal_admin_name }} \
     --account-pass={{ drupal_admin_password}} \
     --db-url=mysql://${MYSQL_USERNAME}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT:-3306}/${MYSQL_DATABASE}
-#fi
 
 {% if APACHE_SSL == 1 %}
 if [ ! -r /etc/httpd/ssl/cert.crt ]; then
