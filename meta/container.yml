@@ -2,3 +2,10 @@ drupal:
   image: centos:7
   working_dir: /
   user: drupal
+  environment:
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USERNAME=drupal
+      - MYSQL_PASSWORD=drupal
+      - MYSQL_PORT=3306
+      - MYSQL_HOST=mysql
+
