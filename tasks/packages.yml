@@ -14,8 +14,6 @@
   - php56w-mbstring
   - php56w-mysql
   - php56w
-  - httpd
-  - mod_ssl
   - mysql
   - git
 

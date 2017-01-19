@@ -1,12 +1,4 @@
 ---
-- name: Create user
-  user:
-    name: drupal
-    uid: 1000
-    group: root
-    createhome: yes
-
 - include: packages.yml
-- include: httpd.yml
 - include: drupal.yml
 

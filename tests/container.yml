@@ -10,7 +10,7 @@ services:
     image: centos:7
     entrypoint: [/usr/bin/entrypoint.sh]
     working_dir: /
-    user: drupal
+    user: apache
     environment:
       - MYSQL_DATABASE=drupal
       - MYSQL_USERNAME=drupal

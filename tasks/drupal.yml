@@ -9,6 +9,9 @@
 #     creates={{ drupal_core_path }}/index.php
 #     chdir={{ drupal_core_path }}
 
+- name: Remove existing /var/www/html
+  file: name=/var/www/html state=absent 
+
 # Download Drupal using Git.
 - name: Check out Drupal Core to the default location.
   git:
@@ -31,7 +34,7 @@
   file:
     path: "{{ drupal_core_path }}/sites/default/settings.php"
     mode: 0744
-    owner: drupal
+    owner: apache
     state: touch
 
 - name: Set permissions properly on files directory.
@@ -40,3 +43,18 @@
     mode: 0777
     state: directory
     recurse: yes
+
+- name: Add entrypoint script
+  template:
+   src: entrypoint.sh.j2
+   dest: /usr/bin/entrypoint.sh
+   owner: root
+   group: root
+   mode: 0775
+
+- name: Add main config
+  template: 
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+
+

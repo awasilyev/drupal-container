@@ -43,4 +43,5 @@ galaxy_info:
     - web
     - container
     - docker 
-dependencies: []
+dependencies: 
+    - awasilyev.apache-container

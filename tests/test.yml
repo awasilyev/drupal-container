@@ -22,7 +22,7 @@
         return_content: yes
       register: output
       retries: 15
-      delay: 3
+      delay: 5
       until: output|succeeded
       
 
